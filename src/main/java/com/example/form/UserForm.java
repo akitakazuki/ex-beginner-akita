@@ -11,6 +11,10 @@ public class UserForm {
 	@Size(min = 1, max = 2000, message="コメントは1文字以上2000文字以内で記載してください")
 	private String comment;
 	
+	public int getIntAge() {
+		return Integer.parseInt(age);
+	}
+	
 	
 	public String getName() {
 		return name;

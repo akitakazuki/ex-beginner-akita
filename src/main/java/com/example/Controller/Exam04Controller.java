@@ -1,15 +1,14 @@
 package com.example.Controller;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.example.domein.User;
 import com.example.form.UserForm;
 
@@ -28,11 +27,9 @@ public class Exam04Controller {
 		return "exam04";
 	}
 
-	@Autowired
-	private HttpSession session;
 	
 	@RequestMapping("/create")
-	public String create(@Validated UserForm form,BindingResult result,Model model) {
+	public String create(@Validated UserForm form, BindingResult result,RedirectAttributes redirectAttributes,Model model) {
 	
 		if(result.hasErrors()) {
 			return index();
@@ -40,9 +37,16 @@ public class Exam04Controller {
 		
 		User user = new User();
 		BeanUtils.copyProperties(form, user);
-		session.setAttribute("user", user);
-		return "exam04-result";
+		redirectAttributes.addFlashAttribute("user", user);
+		user.setAge(form.getIntAge());
 		
+		return "redirect:/ex04/toresult";
+		
+	}
+	
+	@RequestMapping("/toresult")
+	public String toresult() {
+		return "exam04-result";
 	}
 	
 }
